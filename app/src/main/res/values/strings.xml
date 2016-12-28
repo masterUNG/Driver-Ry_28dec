@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Driver Easy</string>
+    <string name="title_activity_service">Map</string>
+
+    <string name="onside">ถึงที่รับ</string>
+    <string name="meter">ค่าโดยสาร</string>
+    <string name="confirm">ยืนยันคัวเลข</string>
+    <string name="start">อกเดินทาง</string>
+
+    <string name="ok">ตกลง</string>
+    <string name="no">ไม่ตกลง</string>
+
+
+</resources>

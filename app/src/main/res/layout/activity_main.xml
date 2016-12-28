@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="nakthon.soraya.driverry.MainActivity"
+    android:background="@drawable/bg27">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:text="Sign in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="SIgn up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button2"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/my_padding"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/icon"
+            android:layout_height="@dimen/icon"
+            android:src="@drawable/logo_bmi_master"
+            android:id="@+id/imageView" />
+
+        <TextView
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textSize="@dimen/h1"
+            android:textStyle="normal|bold"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/aText" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editText2"
+            android:textColor="@color/aText"
+            android:textColorHint="@color/aText"
+            android:hint="User" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/editText"
+            android:hint="Password:"
+            android:inputType="textPassword"
+            android:textColor="@color/aText"
+            android:textColorHint="@color/aText" />
+
+    </LinearLayout>
+</RelativeLayout>
