@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.regex.Pattern;
 
 public class ServiceActivity extends FragmentActivity implements OnMapReadyCallback {
     //Explicit
@@ -53,6 +55,9 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private int hourWaitStartAnInt, minusWaitStartInt,
             hourWaitEndAnInt, minusWaitEndAnInt;
     private boolean aBoolean = true;
+    private int startTimeCountHour = 0;
+    private int startTimeCountMinus = 0;
+    private int endTimeCountHour, endTimeCountMinus, endTimeCountDay;
 
 
     @Override
@@ -70,7 +75,8 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
         //Get Value From Intent
         loginStrings = getIntent().getStringArrayExtra("Login");
-        Log.d("7novV1", "id_Passenger ==>" + loginStrings[0]);
+        Log.d("28decV2", "id_Passenger ==>" + loginStrings[0]);
+        Log.d("28decV2", "time เวลานัดหมาย ==>" + loginStrings[0]);
 
         //Get Value From JSON
         myConstant = new MyConstant();
@@ -95,6 +101,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onClick(View view) {
 
+                //ค่าเริ่มต้นของ aBoolean มีค่า True แต่ถ้าคลิ๊กครั้งแรก จะมีค่า False
                 if (aBoolean) {
                     //ก่อนออกเดินทาง
 
@@ -108,11 +115,18 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                     startActivity(intent);
 
                 } else {
-                    //เริ่มเดินทาง
+                    //เริ่มเดินทาง หรือหยุดเวลา ที่จับ
+                    Calendar calendar = Calendar.getInstance();
+                    endTimeCountDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    endTimeCountHour = calendar.get(Calendar.HOUR_OF_DAY);
+                    endTimeCountMinus = calendar.get(Calendar.MINUTE);
+
+                    Log.d("28decV2", "d:HH:mm เวลาที่หยุดจับ" +
+                            endTimeCountDay + ":" + endTimeCountHour + ":" + endTimeCountMinus);
 
                 }   //if
 
-                Log.d("14novV2", "aBoolean ==> " + aBoolean);
+                Log.d("28decV2", "aBoolean ==> " + aBoolean);
 
 
             }   //onClick
@@ -151,6 +165,9 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
         Log.d("14novV2", "Resume Worked");
 
+        afterReume();
+
+
         if (!aBoolean) {
 
             Log.d("14novV2", "Min ==>" + 0);
@@ -161,35 +178,103 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                 public void run() {
 
                     //จุดที่เริ่มจับเวลา และส่ง SMS
-                    Log.d("14novV2", "Min ==>" + 60);
+                    Log.d("28decV1", "หน่วงเวลา 60 วินาทีเรียบร้อบแล้ว");
                     myCounterTime();
                     mySentSMS(phoneString);
 
+
                 }   // run
-            }, 3000);  // ค่อยกลับมาแก้ 60000
+            }, 60000);
 
         }   // if
 
 
     }   // onResume
 
+    //คือเmethodที่ทำงาน หลังจาก ถ่ายรูปมิเตอร์ เรียบร้อยแล้ว
+
+    private void afterReume() {
+
+
+
+        try {
+
+            //เช็คว่า มาก่อน หรือ หลังเวลานัด
+            Calendar calendar = Calendar.getInstance();
+            int intDay = calendar.get(Calendar.DAY_OF_MONTH);
+            int intHour = calendar.get(Calendar.HOUR_OF_DAY);
+            int intMinus = calendar.get(Calendar.MINUTE);
+            Log.d("28decv2", "intHour ==> " + intHour);
+            Log.d("28decV2", "intMinus ==> " + intMinus);
+            Log.d("28decV2", "เวลานัดหมาย ==> " + jobString[5]);
+
+            String[] timeStrings = jobString[5].split(Pattern.quote("."));
+            Log.d("28decV2", "Hour ที่นัดหมาย ==> " + timeStrings[0]);
+            Log.d("28decV2", "Minus ที่นัดหมาย ==> " + timeStrings[1]);
+
+            String[] dateStrings = jobString[4].split(Pattern.quote("/"));
+            if (intDay <= Integer.parseInt(dateStrings[0])) {
+
+                if (Integer.parseInt(timeStrings[0]) <=23) {
+
+                    if (intHour <=Integer.parseInt(timeStrings[0])) {
+
+                        if (intMinus <=Integer.parseInt(timeStrings[1])) {
+                            Log.d("28decV2", "มาก่อน หรือ ตรงเวลา");
+
+                            startTimeCountHour = Integer.parseInt(timeStrings[0]);
+                            startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
+
+                        } else
+                            Log.d("28decV2", "มาสาย");
+                        startTimeCountHour = intHour;
+                        startTimeCountMinus = intMinus + 1;
+
+                    } else {
+                        Log.d("28decV2", "มาสาย");
+                        startTimeCountHour = intHour;
+                        startTimeCountMinus = intMinus + 1;
+                    }
+
+                }   // if1
+
+            } else {
+                Log.d("28decV2", "มาสาย");
+                startTimeCountHour = intHour;
+                startTimeCountMinus = intMinus + 1;
+            }   // if Day
+
+            // นี่คือเวลาที่เริ่ม จับ
+            Log.d("28decV2", "เวลาที่เริ่มจับ ==> " + startTimeCountHour + ":" + startTimeCountMinus);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+    }   // afterResume
+
     private void mySentSMS(String phoneString) {
 
-        Log.d("14novV3", "phoneCustomer ==> " + phoneString);
+        Log.d("28decV1", "phoneCustomer ==> " + phoneString);
 
-//        Uri uri = Uri.parse("smsto" + phoneString);
-//        Intent intent = new Intent(Intent.ACTION_SENDTO);
-//        intent.setData(uri);
-//        intent.putExtra("sms_body", "Test by MasterUNG");
-//        startActivity(intent);
+//       Uri uri = Uri.parse("smsto" + phoneString);
+//       Intent intent = new Intent(Intent.ACTION_SENDTO);
+//       intent.setData(uri);
+//       intent.putExtra("sms_body", "Test by MasterUNG");
+//       startActivity(intent);
 
-//        SmsManager smsManager = SmsManager.getDefault();
-//        smsManager.sendTextMessage(phoneString, null, "Test Master", null null);
+//       SmsManager smsManager = SmsManager.getDefault();
+//       smsManager.sendTextMessage(phoneString, null, "Test Master", null null);
 
 
     }   //mySentSMS
 
-
+    //ทำหน้าที่จับเวลา ที่ต้องรอลูกค้า
     private void myCounterTime() {
 
         //Get Time WaitStart
