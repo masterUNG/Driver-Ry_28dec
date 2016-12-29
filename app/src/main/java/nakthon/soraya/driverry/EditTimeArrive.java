@@ -2,7 +2,6 @@ package nakthon.soraya.driverry;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -11,26 +10,24 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 /**
- * Created by masterUNG on 12/2/2016 AD.
+ * Created by masterUNG on 12/29/2016 AD.
  */
 
-public class EditStatusTo2 extends AsyncTask<Void, Void, String>{
+public class EditTimeArrive extends AsyncTask<Void, Void, String>{
 
     //Explicit
-    private static final String urlJSON = "http://swiftcodingthai.com/ry/edit_status_where_id.php";
+    private static final String urlPHP = "http://swiftcodingthai.com/ry/edit_timeArrive_where_id_status.php";
     private Context context;
-    private String idDriverString;
-    private String status_oldString;
-    private String statusString;
+    private String idDriverString, statusString, timeArriveString;
 
-    public EditStatusTo2(Context context,
-                         String idDriverString,
-                         String status_oldString,
-                         String statusString) {
+    public EditTimeArrive(Context context,
+                          String idDriverString,
+                          String statusString,
+                          String timeArriveString) {
         this.context = context;
         this.idDriverString = idDriverString;
-        this.status_oldString = status_oldString;
         this.statusString = statusString;
+        this.timeArriveString = timeArriveString;
     }
 
     @Override
@@ -42,19 +39,19 @@ public class EditStatusTo2 extends AsyncTask<Void, Void, String>{
             RequestBody requestBody = new FormEncodingBuilder()
                     .add("isAdd", "true")
                     .add("ID_driver", idDriverString)
-                    .add("Status_old", status_oldString)
                     .add("Status", statusString)
+                    .add("TimeArrive", timeArriveString)
                     .build();
             Request.Builder builder = new Request.Builder();
-            Request request = builder.url(urlJSON).post(requestBody).build();
+            Request request = builder.url(urlPHP).post(requestBody).build();
             Response response = okHttpClient.newCall(request).execute();
             return response.body().string();
 
-
         } catch (Exception e) {
-            Log.d("2decV2", "e doIn ==> " + e.toString());
+            e.printStackTrace();
             return null;
         }
+
 
 
     }
