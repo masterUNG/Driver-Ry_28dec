@@ -130,6 +130,11 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                     Log.d("28decV3", "จำนวนนาที ที่รอ ==> " + minWait);
                     Log.d("28decV3", "id jobTABLE ==> " + jobString[0]);
 
+
+
+
+
+
                 }   //if
 
                 Log.d("28decV2", "aBoolean ==> " + aBoolean);
@@ -264,6 +269,13 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                     loginStrings[0], "2", "3");
             editStatusTo2.execute();
             Log.d("29decV2", "Result jobTABLE ==> " + editStatusTo2.get());
+
+            //Update TimeArrive
+            String timeArrive = Integer.toString(intHour) + "." + Integer.toString(intMinus);
+            EditTimeArrive editTimeArrive = new EditTimeArrive(ServiceActivity.this,
+                    loginStrings[0], "3", timeArrive);
+            editTimeArrive.execute();
+            Log.d("29decV2", "Result timeArrive Update ==> " + editTimeArrive.get());
 
 
         } catch (Exception e) {
