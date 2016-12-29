@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -196,7 +195,6 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private void afterReume() {
 
 
-
         try {
 
             //เช็คว่า มาก่อน หรือ หลังเวลานัด
@@ -213,36 +211,37 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             Log.d("28decV2", "Minus ที่นัดหมาย ==> " + timeStrings[1]);
 
             String[] dateStrings = jobString[4].split(Pattern.quote("/"));
-            if (intDay <= Integer.parseInt(dateStrings[0])) {
+            if (intDay > Integer.parseInt(dateStrings[0])) {
+                // มาถึงในอีกวันใหม่ หมายถึงมาหลังเที่ยงคืนแล้ว เช่น นัด 23.30 แต่มา 0.15
 
-                if (Integer.parseInt(timeStrings[0]) <=23) {
 
-                    if (intHour <=Integer.parseInt(timeStrings[0])) {
+            } else if (intHour < Integer.parseInt(timeStrings[0])) {
+                // มาก่อนเวลา เพราะ ชัวโมงน้อยกว่า
+                startTimeCountHour = Integer.parseInt(timeStrings[0]);
+                startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
+                Log.d("28decV2", "มาก่อนเวลา เพราะ ชัวโมงน้อยกว่า");
 
-                        if (intMinus <=Integer.parseInt(timeStrings[1])) {
-                            Log.d("28decV2", "มาก่อน หรือ ตรงเวลา");
+            } else if (intHour == Integer.parseInt(timeStrings[0])) {
+                // มาในชัวโมงของการ นัด เช่น นัด 14.30 ก็มา 14.xx นั้นเอง
+                if (intMinus <= Integer.parseInt(timeStrings[1])) {
+                    //มาก่อนเวลา เพราะ นาทีน้อยกว่า
+                    startTimeCountHour = Integer.parseInt(timeStrings[0]);
+                    startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
+                    Log.d("28devV2", "มาก่อนเวลา เพราะ นาทีน้อยกว่า");
 
-                            startTimeCountHour = Integer.parseInt(timeStrings[0]);
-                            startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
-
-                        } else
-                            Log.d("28decV2", "มาสาย");
-                        startTimeCountHour = intHour;
-                        startTimeCountMinus = intMinus + 1;
-
-                    } else {
-                        Log.d("28decV2", "มาสาย");
-                        startTimeCountHour = intHour;
-                        startTimeCountMinus = intMinus + 1;
-                    }
-
-                }   // if1
+                } else {
+                    //มาสายเพราะ นาที มากกว่า
+                    startTimeCountHour = intHour;
+                    startTimeCountMinus = intMinus;
+                    Log.d("28decV2", "มาสายเพราะ นาที มากกว่า");
+                }
 
             } else {
-                Log.d("28decV2", "มาสาย");
+                //สภาวะของการมาสาย เพราะ ชั่วโมงมากกว่า
                 startTimeCountHour = intHour;
-                startTimeCountMinus = intMinus + 1;
-            }   // if Day
+                startTimeCountMinus = intMinus;
+                Log.d("28decV2", "วันเดียวกัน แต่สาย เพราะชั่วโมงมากกว่า");
+            }
 
             // นี่คือเวลาที่เริ่ม จับ
             Log.d("28decV2", "เวลาที่เริ่มจับ ==> " + startTimeCountHour + ":" + startTimeCountMinus);
@@ -251,9 +250,6 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
 
 
     }   // afterResume
