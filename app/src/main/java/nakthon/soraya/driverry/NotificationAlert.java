@@ -3,6 +3,7 @@ package nakthon.soraya.driverry;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -37,11 +38,31 @@ public class NotificationAlert extends AppCompatActivity {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NotificationAlert.this, ServiceActivity.class);
-                intent.putExtra("Login", loginStrings);
-                startActivity(intent);
-                finish();
-            }
+
+                try {
+
+                    //For userTABLE_ry
+                    EditStatusDriver editStatusDriver = new EditStatusDriver(NotificationAlert.this,
+                            loginStrings[0], "2");
+                    editStatusDriver.execute();
+                    Log.d("29decV2", "Result userTABLE ==> " + editStatusDriver.get());
+
+                    //For jobTABLE
+                    EditStatusTo2 editStatusTo2 = new EditStatusTo2(NotificationAlert.this,
+                            loginStrings[0], "2");
+                    editStatusTo2.execute();
+                    Log.d("29decV2", "Result jobTABLE ==> " + editStatusTo2.get());
+
+                    Intent intent = new Intent(NotificationAlert.this, ServiceActivity.class);
+                    intent.putExtra("Login", loginStrings);
+                    startActivity(intent);
+                    finish();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }   // onClick
         });
 
     }   // Main Method

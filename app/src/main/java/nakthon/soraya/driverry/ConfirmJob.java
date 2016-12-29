@@ -28,7 +28,7 @@ public class ConfirmJob extends AppCompatActivity {
         //Get Value of Login Pass
         loginString = getIntent().getStringArrayExtra("Login");
         for (int i = 0; i < loginString.length; i++) {
-            Log.d(tagStrings[0], "loginString(" + i + ")==>" + loginString[i]);
+            Log.d("29decV1", "loginString(" + i + ")==>" + loginString[i]);
         }   // for
         //Login Status ==> 1
         editStatus(1);
@@ -57,11 +57,19 @@ public class ConfirmJob extends AppCompatActivity {
 
             try {
 
+                //Update Status of jobTABLE
                 EditStatusTo2 editStatusTo2 = new EditStatusTo2(ConfirmJob.this,
-                        loginString[0]);
+                        loginString[0], "1");   // เกิดจากการที่ คนขับรถ ปฎิเสธงาน
                 editStatusTo2.execute();
 
-                Log.d("2decV2", "Result ==> " + editStatusTo2.get());
+                Log.d("29decV2", "Result jobTABLE ==> " + editStatusTo2.get());
+
+                //Update Status of userTABLE_ry
+                EditStatusDriver editStatusDriver = new EditStatusDriver(ConfirmJob.this,
+                        loginString[0], "1");
+                editStatusDriver.execute();
+                Log.d("29decV2", "Result userTABLE ==> " + editStatusDriver.get());
+
 
             } catch (Exception e) {
                 Log.d("2decV2", "e onRestate ==> " + e.toString());

@@ -20,10 +20,14 @@ public class EditStatusTo2 extends AsyncTask<Void, Void, String>{
     private static final String urlJSON = "http://swiftcodingthai.com/ry/edit_status_where_id.php";
     private Context context;
     private String idDriverString;
+    private String statusString;
 
-    public EditStatusTo2(Context context, String idDriverString) {
+    public EditStatusTo2(Context context,
+                         String idDriverString,
+                         String statusString) {
         this.context = context;
         this.idDriverString = idDriverString;
+        this.statusString = statusString;
     }
 
     @Override
@@ -35,6 +39,7 @@ public class EditStatusTo2 extends AsyncTask<Void, Void, String>{
             RequestBody requestBody = new FormEncodingBuilder()
                     .add("isAdd", "true")
                     .add("ID_driver", idDriverString)
+                    .add("Status", statusString)
                     .build();
             Request.Builder builder = new Request.Builder();
             Request request = builder.url(urlJSON).post(requestBody).build();

@@ -123,6 +123,13 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                     Log.d("28decV2", "d:HH:mm เวลาที่หยุดจับ" +
                             endTimeCountDay + ":" + endTimeCountHour + ":" + endTimeCountMinus);
 
+                    //Calculate นาทีที่หยุดรอ
+                    int minStart = (startTimeCountHour * 60) + startTimeCountMinus;
+                    int minEnd = (endTimeCountHour * 60) + endTimeCountMinus;
+                    int minWait = minEnd - minStart;
+                    Log.d("28decV3", "จำนวนนาที ที่รอ ==> " + minWait);
+                    Log.d("28decV3", "id jobTABLE ==> " + jobString[0]);
+
                 }   //if
 
                 Log.d("28decV2", "aBoolean ==> " + aBoolean);
