@@ -16,18 +16,15 @@ import com.squareup.okhttp.Response;
 public class EditTimeWait extends AsyncTask<Void, Void, String>{
 
     //Explicit
-    private static final String urlPHP = "http://swiftcodingthai.com/ry/edit_timeArrive_where_id_status.php";
+    private static final String urlPHP = "http://swiftcodingthai.com/ry/edit_timeWait_where_id_status.php";
     private Context context;
-    private String idDriverString, statusString, timeArriveString;
+    private String idDriverString, statusString, timeWaitString;
 
-    public EditTimeWait(Context context,
-                        String idDriverString,
-                        String statusString,
-                        String timeArriveString) {
+    public EditTimeWait(Context context, String idDriverString, String statusString, String timeWaitString) {
         this.context = context;
         this.idDriverString = idDriverString;
         this.statusString = statusString;
-        this.timeArriveString = timeArriveString;
+        this.timeWaitString = timeWaitString;
     }
 
     @Override
@@ -40,7 +37,7 @@ public class EditTimeWait extends AsyncTask<Void, Void, String>{
                     .add("isAdd", "true")
                     .add("ID_driver", idDriverString)
                     .add("Status", statusString)
-                    .add("TimeArrive", timeArriveString)
+                    .add("TimeWait", timeWaitString)
                     .build();
             Request.Builder builder = new Request.Builder();
             Request request = builder.url(urlPHP).post(requestBody).build();
