@@ -197,7 +197,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
     }   // onResume
 
-    //คือเmethodที่ทำงาน หลังจาก ถ่ายรูปมิเตอร์ เรียบร้อยแล้ว
+    //คือ methodที่ทำงาน หลังจาก ถ่ายรูปมิเตอร์ เรียบร้อยแล้ว
 
     private void afterReume() {
 
@@ -252,6 +252,18 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
             // นี่คือเวลาที่เริ่ม จับ
             Log.d("28decV2", "เวลาที่เริ่มจับ ==> " + startTimeCountHour + ":" + startTimeCountMinus);
+
+            //For userTABLE_ry
+            EditStatusDriver editStatusDriver = new EditStatusDriver(ServiceActivity.this,
+                    loginStrings[0], "3");
+            editStatusDriver.execute();
+            Log.d("29decV2", "Result userTABLE ==> " + editStatusDriver.get());
+
+            //For jobTABLE
+            EditStatusTo2 editStatusTo2 = new EditStatusTo2(ServiceActivity.this,
+                    loginStrings[0], "2", "3");
+            editStatusTo2.execute();
+            Log.d("29decV2", "Result jobTABLE ==> " + editStatusTo2.get());
 
 
         } catch (Exception e) {
@@ -355,6 +367,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                 RequestBody requestBody = new FormEncodingBuilder()
                         .add("isAdd", "true")
                         .add("ID_passenger", loginStrings[0])
+                        .add("Status", "2")
                         .build();
                 Request.Builder builder = new Request.Builder();
                 Request request = builder.url(strings[0]).post(requestBody).build();

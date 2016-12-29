@@ -49,7 +49,7 @@ public class NotificationAlert extends AppCompatActivity {
 
                     //For jobTABLE
                     EditStatusTo2 editStatusTo2 = new EditStatusTo2(NotificationAlert.this,
-                            loginStrings[0], "2");
+                            loginStrings[0],"0", "2");
                     editStatusTo2.execute();
                     Log.d("29decV2", "Result jobTABLE ==> " + editStatusTo2.get());
 

@@ -59,7 +59,7 @@ public class ConfirmJob extends AppCompatActivity {
 
                 //Update Status of jobTABLE
                 EditStatusTo2 editStatusTo2 = new EditStatusTo2(ConfirmJob.this,
-                        loginString[0], "1");   // เกิดจากการที่ คนขับรถ ปฎิเสธงาน
+                        loginString[0],"0", "1");   // เกิดจากการที่ คนขับรถ ปฎิเสธงาน
                 editStatusTo2.execute();
 
                 Log.d("29decV2", "Result jobTABLE ==> " + editStatusTo2.get());
