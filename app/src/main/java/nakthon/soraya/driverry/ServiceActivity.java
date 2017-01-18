@@ -65,17 +65,12 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         setContentView(R.layout.my_service_layout);
 
         //Bind WIdget
-        nameTextView = (TextView) findViewById(R.id.textView3);
-        phoneTextView = (TextView) findViewById(R.id.textView4);
-        dateTextView = (TextView) findViewById(R.id.textView5);
-        timeTextView = (TextView) findViewById(R.id.textView6);
-        imageView = (ImageView) findViewById(R.id.imageView2);
-        button = (Button) findViewById(R.id.button4);
+        bindWidget();
 
         //Get Value From Intent
         loginStrings = getIntent().getStringArrayExtra("Login");
         Log.d("28decV2", "id_Passenger ==>" + loginStrings[0]);
-        Log.d("28decV2", "time เวลานัดหมาย ==>" + loginStrings[0]);
+
 
         //Get Value From JSON
         myConstant = new MyConstant();
@@ -145,6 +140,15 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
 
     }   //Main Method
+
+    private void bindWidget() {
+        nameTextView = (TextView) findViewById(R.id.textView3);
+        phoneTextView = (TextView) findViewById(R.id.textView4);
+        dateTextView = (TextView) findViewById(R.id.textView5);
+        timeTextView = (TextView) findViewById(R.id.textView6);
+        imageView = (ImageView) findViewById(R.id.imageView2);
+        button = (Button) findViewById(R.id.button4);
+    }
 
     @Override
     public void onBackPressed() {
@@ -218,7 +222,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             Log.d("28decV2", "intMinus ==> " + intMinus);
             Log.d("28decV2", "เวลานัดหมาย ==> " + jobString[5]);
 
-            String[] timeStrings = jobString[5].split(Pattern.quote("."));
+            String[] timeStrings = jobString[5].split(Pattern.quote(":"));
             Log.d("28decV2", "Hour ที่นัดหมาย ==> " + timeStrings[0]);
             Log.d("28decV2", "Minus ที่นัดหมาย ==> " + timeStrings[1]);
 
