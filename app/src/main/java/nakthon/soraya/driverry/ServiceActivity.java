@@ -270,8 +270,12 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             editStatusTo2.execute();
             Log.d("29decV2", "Result jobTABLE ==> " + editStatusTo2.get());
 
+            //==============================================================
             //Update TimeArrive
-            String timeArrive = Integer.toString(intHour) + "." + Integer.toString(intMinus);
+            //==============================================================
+            String timeArrive = Integer.toString(intHour) + ":" + Integer.toString(intMinus) + ":00";
+
+            Log.d("29decV2", "timeArrive ==> " + timeArrive);
             EditTimeArrive editTimeArrive = new EditTimeArrive(ServiceActivity.this,
                     loginStrings[0], "3", timeArrive);
             editTimeArrive.execute();
