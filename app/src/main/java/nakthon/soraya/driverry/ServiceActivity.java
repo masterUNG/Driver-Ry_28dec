@@ -215,7 +215,10 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
         try {
 
-            //เช็คว่า มาก่อน หรือ หลังเวลานัด
+            //=======================================================
+            // หาการมาก่อนนัด หลัง นัด
+            //=======================================================
+
             Calendar calendar = Calendar.getInstance(); // เวลาที่มาถึง
             Log.d("28decV2", "เวลาที่มา ==> " + calendar.getTime().toString());
             int intDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -239,70 +242,80 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
             String strArriveTime = dateFormat.format(calendar.getTime());
             Log.d("28decV2", "strArriveTime ==> " + strArriveTime);
-            //=======================================================
-            // หาการมาก่อนนัด หลัง นัด
-            //=======================================================
+            String strPointTime = dateFormat.format(calendar1.getTime());
+            Log.d("28decV2", "strPointTime ==> " + strPointTime);
 
+            String strStartCountTime = null;
 
-
-            String[] dateStrings = jobString[4].split(Pattern.quote("/"));
-            if (intDay > Integer.parseInt(dateStrings[0])) {
-                // มาถึงในอีกวันใหม่ หมายถึงมาหลังเที่ยงคืนแล้ว เช่น นัด 23.30 แต่มา 0.15
-
-
-            } else if (intHour < Integer.parseInt(timeStrings[0])) {
-                // มาก่อนเวลา เพราะ ชัวโมงน้อยกว่า
-                startTimeCountHour = Integer.parseInt(timeStrings[0]);
-                startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
-                Log.d("28decV2", "มาก่อนเวลา เพราะ ชัวโมงน้อยกว่า");
-
-            } else if (intHour == Integer.parseInt(timeStrings[0])) {
-                // มาในชัวโมงของการ นัด เช่น นัด 14.30 ก็มา 14.xx นั้นเอง
-                if (intMinus <= Integer.parseInt(timeStrings[1])) {
-                    //มาก่อนเวลา เพราะ นาทีน้อยกว่า
-                    startTimeCountHour = Integer.parseInt(timeStrings[0]);
-                    startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
-                    Log.d("28devV2", "มาก่อนเวลา เพราะ นาทีน้อยกว่า");
-
-                } else {
-                    //มาสายเพราะ นาที มากกว่า
-                    startTimeCountHour = intHour;
-                    startTimeCountMinus = intMinus;
-                    Log.d("28decV2", "มาสายเพราะ นาที มากกว่า");
-                }
+            if (calendar.before(calendar1)) {
+                //มาก่อนเวลานัด
+                strStartCountTime = strPointTime;
 
             } else {
-                //สภาวะของการมาสาย เพราะ ชั่วโมงมากกว่า
-                startTimeCountHour = intHour;
-                startTimeCountMinus = intMinus;
-                Log.d("28decV2", "วันเดียวกัน แต่สาย เพราะชั่วโมงมากกว่า");
+                //มาหลังเวลานัด
+                strStartCountTime = strArriveTime;
             }
 
-            // นี่คือเวลาที่เริ่ม จับ
-            Log.d("28decV2", "เวลาที่เริ่มจับ ==> " + startTimeCountHour + ":" + startTimeCountMinus);
+///////////////
+//
+//            String[] dateStrings = jobString[4].split(Pattern.quote("/"));
+//            if (intDay > Integer.parseInt(dateStrings[0])) {
+//                // มาถึงในอีกวันใหม่ หมายถึงมาหลังเที่ยงคืนแล้ว เช่น นัด 23.30 แต่มา 0.15
+//
+//
+//            } else if (intHour < Integer.parseInt(timeStrings[0])) {
+//                // มาก่อนเวลา เพราะ ชัวโมงน้อยกว่า
+//                startTimeCountHour = Integer.parseInt(timeStrings[0]);
+//                startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
+//                Log.d("28decV2", "มาก่อนเวลา เพราะ ชัวโมงน้อยกว่า");
+//
+//            } else if (intHour == Integer.parseInt(timeStrings[0])) {
+//                // มาในชัวโมงของการ นัด เช่น นัด 14.30 ก็มา 14.xx นั้นเอง
+//                if (intMinus <= Integer.parseInt(timeStrings[1])) {
+//                    //มาก่อนเวลา เพราะ นาทีน้อยกว่า
+//                    startTimeCountHour = Integer.parseInt(timeStrings[0]);
+//                    startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
+//                    Log.d("28devV2", "มาก่อนเวลา เพราะ นาทีน้อยกว่า");
+//
+//                } else {
+//                    //มาสายเพราะ นาที มากกว่า
+//                    startTimeCountHour = intHour;
+//                    startTimeCountMinus = intMinus;
+//                    Log.d("28decV2", "มาสายเพราะ นาที มากกว่า");
+//                }
+//
+//            } else {
+//                //สภาวะของการมาสาย เพราะ ชั่วโมงมากกว่า
+//                startTimeCountHour = intHour;
+//                startTimeCountMinus = intMinus;
+//                Log.d("28decV2", "วันเดียวกัน แต่สาย เพราะชั่วโมงมากกว่า");
+//            }
+//
+//            ////////////////////////
 
-            //For userTABLE_ry
+
+            //For userTABLE_ry กำหนด Status เท่ากับ 3
             EditStatusDriver editStatusDriver = new EditStatusDriver(ServiceActivity.this,
                     loginStrings[0], "3");
             editStatusDriver.execute();
-            Log.d("29decV2", "Result userTABLE ==> " + editStatusDriver.get());
+            Log.d("28decV2", "Result userTABLE ==> " + editStatusDriver.get());
 
             //For jobTABLE
             EditStatusTo2 editStatusTo2 = new EditStatusTo2(ServiceActivity.this,
                     loginStrings[0], "2", "3");
             editStatusTo2.execute();
-            Log.d("29decV2", "Result jobTABLE ==> " + editStatusTo2.get());
+            Log.d("28decV2", "Result jobTABLE ==> " + editStatusTo2.get());
 
             //==============================================================
             //Update TimeArrive
             //==============================================================
-            String timeArrive = Integer.toString(intHour) + ":" + Integer.toString(intMinus) + ":00";
 
-            Log.d("29decV2", "timeArrive ==> " + timeArrive);
+
+
             EditTimeArrive editTimeArrive = new EditTimeArrive(ServiceActivity.this,
-                    loginStrings[0], "3", timeArrive, "damyStartcount");
+                    loginStrings[0], "3", strArriveTime, strStartCountTime);
             editTimeArrive.execute();
-            Log.d("29decV2", "Result timeArrive Update ==> " + editTimeArrive.get());
+            Log.d("28decV2", "Result timeArrive Update ==> " + editTimeArrive.get());
 
 
         } catch (Exception e) {

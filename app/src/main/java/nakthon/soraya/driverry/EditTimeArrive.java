@@ -43,6 +43,7 @@ public class EditTimeArrive extends AsyncTask<Void, Void, String>{
                     .add("ID_driver", idDriverString)
                     .add("Status", statusString)
                     .add("TimeArrive", timeArriveString)
+                    .add("StartCountTime", startCountString)
                     .build();
             Request.Builder builder = new Request.Builder();
             Request request = builder.url(urlPHP).post(requestBody).build();
