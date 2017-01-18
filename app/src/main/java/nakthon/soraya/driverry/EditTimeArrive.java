@@ -18,16 +18,18 @@ public class EditTimeArrive extends AsyncTask<Void, Void, String>{
     //Explicit
     private static final String urlPHP = "http://swiftcodingthai.com/ry/edit_timeArrive_where_id_status.php";
     private Context context;
-    private String idDriverString, statusString, timeArriveString;
+    private String idDriverString, statusString, timeArriveString, startCountString;
 
     public EditTimeArrive(Context context,
                           String idDriverString,
                           String statusString,
-                          String timeArriveString) {
+                          String timeArriveString,
+                          String startCountString) {
         this.context = context;
         this.idDriverString = idDriverString;
         this.statusString = statusString;
         this.timeArriveString = timeArriveString;
+        this.startCountString = startCountString;
     }
 
     @Override

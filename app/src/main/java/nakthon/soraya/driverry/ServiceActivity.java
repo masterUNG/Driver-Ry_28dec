@@ -277,7 +277,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
             Log.d("29decV2", "timeArrive ==> " + timeArrive);
             EditTimeArrive editTimeArrive = new EditTimeArrive(ServiceActivity.this,
-                    loginStrings[0], "3", timeArrive);
+                    loginStrings[0], "3", timeArrive, "damyStartcount");
             editTimeArrive.execute();
             Log.d("29decV2", "Result timeArrive Update ==> " + editTimeArrive.get());
 
