@@ -34,6 +34,8 @@ import com.squareup.okhttp.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.regex.Pattern;
 
@@ -214,7 +216,8 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         try {
 
             //เช็คว่า มาก่อน หรือ หลังเวลานัด
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance(); // เวลาที่มาถึง
+            Log.d("28decV2", "เวลาที่มา ==> " + calendar.getTime().toString());
             int intDay = calendar.get(Calendar.DAY_OF_MONTH);
             int intHour = calendar.get(Calendar.HOUR_OF_DAY);
             int intMinus = calendar.get(Calendar.MINUTE);
@@ -222,9 +225,25 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             Log.d("28decV2", "intMinus ==> " + intMinus);
             Log.d("28decV2", "เวลานัดหมาย ==> " + jobString[5]);
 
+
+            Calendar calendar1 = Calendar.getInstance();
             String[] timeStrings = jobString[5].split(Pattern.quote(":"));
             Log.d("28decV2", "Hour ที่นัดหมาย ==> " + timeStrings[0]);
             Log.d("28decV2", "Minus ที่นัดหมาย ==> " + timeStrings[1]);
+            calendar1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStrings[0]));
+            calendar1.set(Calendar.MINUTE, Integer.parseInt(timeStrings[1]));
+            Log.d("28decV2", "เวลาที่นัด ==> " + calendar1.getTime().toString());
+
+            Log.d("28decV2", "มาก่อนเวลา มั้ง ==> " + calendar.before(calendar1));
+
+            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            String strArriveTime = dateFormat.format(calendar.getTime());
+            Log.d("28decV2", "strArriveTime ==> " + strArriveTime);
+            //=======================================================
+            // หาการมาก่อนนัด หลัง นัด
+            //=======================================================
+
+
 
             String[] dateStrings = jobString[4].split(Pattern.quote("/"));
             if (intDay > Integer.parseInt(dateStrings[0])) {
