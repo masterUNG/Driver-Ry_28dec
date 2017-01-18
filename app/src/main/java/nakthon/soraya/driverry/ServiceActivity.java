@@ -59,6 +59,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private int startTimeCountHour = 0;
     private int startTimeCountMinus = 0;
     private int endTimeCountHour, endTimeCountMinus, endTimeCountDay;
+    private String strStartCountTime;
 
 
     @Override
@@ -93,6 +94,14 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
 
         //Button Controller
+        buttonController();
+
+
+
+    }   //Main Method
+
+    private void buttonController() {
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,20 +122,9 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                 } else {
                     //เริ่มเดินทาง หรือหยุดเวลา ที่จับ
                     Calendar calendar = Calendar.getInstance();
-                    endTimeCountDay = calendar.get(Calendar.DAY_OF_MONTH);
-                    endTimeCountHour = calendar.get(Calendar.HOUR_OF_DAY);
-                    endTimeCountMinus = calendar.get(Calendar.MINUTE);
-
-                    Log.d("28decV2", "d:HH:mm เวลาที่หยุดจับ" +
-                            endTimeCountDay + ":" + endTimeCountHour + ":" + endTimeCountMinus);
-
-                    //Calculate นาทีที่หยุดรอ
-                    int minStart = (startTimeCountHour * 60) + startTimeCountMinus;
-                    int minEnd = (endTimeCountHour * 60) + endTimeCountMinus;
-                    int minWait = minEnd - minStart;
-                    Log.d("28decV3", "จำนวนนาที ที่รอ ==> " + minWait);
-                    Log.d("28decV3", "id jobTABLE ==> " + jobString[0]);
-
+                    DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+                    String endCountTime = dateFormat.format(calendar.getTime());
+                    Log.d("28decV2", "endcountTime หรือเวลาออกเดินทาง ==> " + endCountTime);
 
 
 
@@ -140,8 +138,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             }   //onClick
         });
 
-
-    }   //Main Method
+    }   // buttonController
 
     private void bindWidget() {
         nameTextView = (TextView) findViewById(R.id.textView3);
@@ -212,7 +209,6 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
 
     private void afterReume() {
 
-
         try {
 
             //=======================================================
@@ -245,7 +241,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             String strPointTime = dateFormat.format(calendar1.getTime());
             Log.d("28decV2", "strPointTime ==> " + strPointTime);
 
-            String strStartCountTime = null;
+
 
             if (calendar.before(calendar1)) {
                 //มาก่อนเวลานัด
@@ -255,43 +251,6 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                 //มาหลังเวลานัด
                 strStartCountTime = strArriveTime;
             }
-
-///////////////
-//
-//            String[] dateStrings = jobString[4].split(Pattern.quote("/"));
-//            if (intDay > Integer.parseInt(dateStrings[0])) {
-//                // มาถึงในอีกวันใหม่ หมายถึงมาหลังเที่ยงคืนแล้ว เช่น นัด 23.30 แต่มา 0.15
-//
-//
-//            } else if (intHour < Integer.parseInt(timeStrings[0])) {
-//                // มาก่อนเวลา เพราะ ชัวโมงน้อยกว่า
-//                startTimeCountHour = Integer.parseInt(timeStrings[0]);
-//                startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
-//                Log.d("28decV2", "มาก่อนเวลา เพราะ ชัวโมงน้อยกว่า");
-//
-//            } else if (intHour == Integer.parseInt(timeStrings[0])) {
-//                // มาในชัวโมงของการ นัด เช่น นัด 14.30 ก็มา 14.xx นั้นเอง
-//                if (intMinus <= Integer.parseInt(timeStrings[1])) {
-//                    //มาก่อนเวลา เพราะ นาทีน้อยกว่า
-//                    startTimeCountHour = Integer.parseInt(timeStrings[0]);
-//                    startTimeCountMinus = Integer.parseInt(timeStrings[1]) + 1;
-//                    Log.d("28devV2", "มาก่อนเวลา เพราะ นาทีน้อยกว่า");
-//
-//                } else {
-//                    //มาสายเพราะ นาที มากกว่า
-//                    startTimeCountHour = intHour;
-//                    startTimeCountMinus = intMinus;
-//                    Log.d("28decV2", "มาสายเพราะ นาที มากกว่า");
-//                }
-//
-//            } else {
-//                //สภาวะของการมาสาย เพราะ ชั่วโมงมากกว่า
-//                startTimeCountHour = intHour;
-//                startTimeCountMinus = intMinus;
-//                Log.d("28decV2", "วันเดียวกัน แต่สาย เพราะชั่วโมงมากกว่า");
-//            }
-//
-//            ////////////////////////
 
 
             //For userTABLE_ry กำหนด Status เท่ากับ 3
