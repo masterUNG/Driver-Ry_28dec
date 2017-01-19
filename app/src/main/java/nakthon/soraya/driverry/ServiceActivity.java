@@ -59,7 +59,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private int startTimeCountHour = 0;
     private int startTimeCountMinus = 0;
     private int endTimeCountHour, endTimeCountMinus, endTimeCountDay;
-    private String strStartCountTime;
+    private String strStartCountTime, endCountTime;
 
 
     @Override
@@ -123,9 +123,11 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                     //เริ่มเดินทาง หรือหยุดเวลา ที่จับ
                     Calendar calendar = Calendar.getInstance();
                     DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-                    String endCountTime = dateFormat.format(calendar.getTime());
+                    endCountTime = dateFormat.format(calendar.getTime());
                     Log.d("28decV2", "endcountTime หรือเวลาออกเดินทาง ==> " + endCountTime);
 
+                    //หาจำนวนนาที่ ที่หยุดรอ และ อัพเดทไปที่ jobTABLE บน Server
+                    findWaitMinus();
 
 
 
@@ -139,6 +141,37 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         });
 
     }   // buttonController
+
+    private void findWaitMinus() {
+
+        Log.d("19janV1", "เวลาที่เริ่มจับ ==> " + strStartCountTime);
+        Log.d("19janV1", "เวลาที่หยุดจับ ==> " + endCountTime);
+
+        String[] startStrings = strStartCountTime.split(":");
+        String[] endStrings = endCountTime.split(":");
+        int startMinus = (Integer.parseInt(startStrings[0]) * 60) + Integer.parseInt(startStrings[1]);
+        int endMinus = (Integer.parseInt(endStrings[0]) * 60) + Integer.parseInt(endStrings[1]);
+
+        Log.d("19janV1", "startMinus ==> " + startMinus);
+        Log.d("19janV1", "endMinus ==> " + endMinus);
+
+        int countTimeMinus = endMinus - startMinus;
+        Log.d("19janV1", "countTimeMinus ==> " + countTimeMinus);
+
+        try {
+
+            UpdateCountMinus updateCountMinus = new UpdateCountMinus(ServiceActivity.this,
+                    loginStrings[0], "3", endCountTime, Integer.toString(countTimeMinus));
+            updateCountMinus.execute();
+            String strResult = updateCountMinus.get();
+            Log.d("19janV1", "ผลของการ Update ==> " + strResult);
+
+        } catch (Exception e) {
+            Log.d("19janV1", "e ==> " + e.toString());
+        }
+
+
+    }   // findWaitMinus
 
     private void bindWidget() {
         nameTextView = (TextView) findViewById(R.id.textView3);
